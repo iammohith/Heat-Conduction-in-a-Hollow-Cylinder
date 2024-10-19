@@ -4,32 +4,55 @@ Created on Wed Apr 15 17:35:28 2020
 
 @author: Mohith Sai
 """
-""" Let us consider heat tranfer through a hollow pipe with
-fluid flow inside. Heat is assumed to flow only radially.
-A hollow cylinder with length L and Ti & To be the 
-inside and outside temperatures of hollow cylinder
-Ri and Ro be the inside and outside radius of hollow cylinder with heat generation Qg
-the temperature distributuion over a hollow cylinder is given by
-T(r) = Qg/4*k*(Ro**2-R**2) + (ln(r/Ro)/ln(Ro/Ri)*(Qg/4*k(Ro**2-Ri**2)+To-Ti)) + Ti"""
+# Heat Transfer in a Hollow Cylinder with Heat Generation
+
+"""
+This script simulates the temperature distribution through a hollow pipe with fluid flowing inside.
+Heat transfer is assumed to flow only radially. The parameters considered are:
+- Inside temperature (Ti)
+- Outside temperature (To)
+- Inside radius (Ri)
+- Outside radius (Ro)
+- Heat generation rate (Qg)
+- Thermal conductivity (K)
+
+The temperature distribution over the hollow cylinder is calculated using the equation:
+T(r) = Qg/4*k*(Ro**2 - r**2) + (ln(r/Ro)/ln(Ro/Ri)) * (Qg/4*k*(Ro**2 - Ri**2) + To - Ti) + Ti
+where:
+- r is the radial distance from the center of the cylinder.
+"""
 
 import numpy as np
 import matplotlib.pyplot as plt
 
-Ti = 100 #inside pipe temperature units must be in degC
-To = 20 #outside pipe temperature units must be in degC
-Ri = 0.5 #inside radius of pipe units must be in meters
-Ro = 1 #outside radius of pipe units must be in meters
-Qg = 100 #heat generation the units must be W/m**3
-K = 10 #thermal conductivity of the material
-n = 20 #the number of points
-r = np.linspace(Ri,Ro,n) #linearlyspaced points
-T = np.ones(n) #preallocating array of ones for temperature
-const = Qg/4*K
+# Define temperatures and dimensions
+Ti = 100  # Inside pipe temperature (°C)
+To = 20   # Outside pipe temperature (°C)
+Ri = 0.5  # Inside radius of the pipe (m)
+Ro = 1    # Outside radius of the pipe (m)
+Qg = 100  # Heat generation rate (W/m³)
+K = 10    # Thermal conductivity of the material (W/m·K)
+
+# Number of discrete points to calculate temperature
+n = 20  
+r = np.linspace(Ri, Ro, n)  # Linearly spaced points from Ri to Ro
+T = np.ones(n)  # Preallocate array for temperature values
+
+# Calculate temperature distribution
+const = Qg / (4 * K)  # Constant term for temperature distribution calculation
 for i in range(n):
-    T[i] = const*((Ro**2) - (r[i]**2)) + (np.log(r[i]/Ri)/np.log(Ro/Ri))*((const*((Ro**2) - (Ri**2))) + To - Ti) + To
+    T[i] = (const * (Ro**2 - r[i]**2) +
+             (np.log(r[i] / Ri) / np.log(Ro / Ri)) * 
+             (const * (Ro**2 - Ri**2) + To - Ti) + Ti)
+
+# Visualization of temperature distribution
 plt.figure(1)
-plt.plot(r,T,color='red', linestyle='dashed', marker='.', markerfacecolor='blue')
-plt.xlabel('Distacnce (m)')
-plt.ylabel('Temperature (C)')
-plt.title('Temperature Graph')
-print("The temperatures are:",T)
+plt.plot(r, T, color='red', linestyle='dashed', marker='.', markerfacecolor='blue')
+plt.xlabel('Distance (m)')
+plt.ylabel('Temperature (°C)')
+plt.title('Temperature Distribution in a Hollow Cylinder with Heat Generation')
+plt.grid()  # Add grid for better readability
+plt.show()  # Display the plot
+
+# Print calculated temperatures for each radial distance
+print("The temperatures at various distances are:", T)
