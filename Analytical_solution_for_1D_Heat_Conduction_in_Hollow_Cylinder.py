@@ -4,29 +4,50 @@ Created on Sun Apr 12 21:55:55 2020
 
 @author: Mohith Sai
 """
-""" Let us consider heat tranfer through a hollow pipe with
-fluid flow inside. Heat is assumed to flow only radially.
-A hollow cylinder with length L and Ti & To be the 
-inside and outside temperatures of hollow cylinder
-Ri and Ro be the inside and outside radius of hollow cylinder
-the temperature distributuion over a hollow cylinder is given by
-T(r) = (ln(r/Ri)/ln(Ro/Ri))*(To-Ti) + Ti"""
+# Heat Transfer in a Hollow Cylinder
+
+"""
+This script simulates the temperature distribution through a hollow pipe with fluid flowing inside.
+The heat transfer is assumed to flow only radially.
+The parameters considered are:
+- Length of the cylinder (L) [not used in calculations here]
+- Inside temperature (Ti)
+- Outside temperature (To)
+- Inside radius (Ri)
+- Outside radius (Ro)
+
+The temperature distribution over the hollow cylinder is calculated using the equation:
+T(r) = (ln(r/Ri)/ln(Ro/Ri))*(To - Ti) + Ti
+where:
+- r is the radial distance from the center of the cylinder.
+"""
 
 import numpy as np
 import matplotlib.pyplot as plt
 
-Ti = 100 #inside pipe temperature units must be in degC
-To = 35 #outside pipe temperature units must be in degC
-Ri = 0.5 #inside radius of pipe units must be in meters
-Ro = 1 #outside radius of pipe units must be in meters
-n = 20 #the number of points
-r = np.linspace(Ri,Ro,n) #linearlyspaced points
-T = np.ones(n) #preallocating array of ones for temperature
-for i in range(0,n):
-    T[i] = ((np.log(r[i]/Ri)/np.log(Ro/Ri))*(To-Ti)) + Ti
+# Define temperatures and dimensions
+Ti = 100  # Inside pipe temperature (°C)
+To = 35   # Outside pipe temperature (°C)
+Ri = 0.5  # Inside radius of the pipe (m)
+Ro = 1    # Outside radius of the pipe (m)
+
+# Number of discrete points to calculate temperature
+n = 20  
+r = np.linspace(Ri, Ro, n)  # Linearly spaced points from Ri to Ro
+T = np.ones(n)  # Preallocate array for temperature values
+
+# Calculate temperature distribution
+for i in range(n):
+    T[i] = ((np.log(r[i] / Ri) / np.log(Ro / Ri)) * (To - Ti)) + Ti
+
+# Visualization of temperature distribution
 plt.figure(1)
-plt.plot(r,T,color='red', linestyle='dashed', marker='.', markerfacecolor='blue')
-plt.xlabel('Distacnce (m)')
-plt.ylabel('Temperature (C)')
-plt.title('Temperature Graph')
-print("The temperatures are:",T)
+plt.plot(r, T, color='red', linestyle='dashed', marker='.', markerfacecolor='blue')
+plt.xlabel('Distance (m)')
+plt.ylabel('Temperature (°C)')
+plt.title('Temperature Distribution in a Hollow Cylinder')
+plt.grid()  # Add grid for better readability
+plt.show()  # Display the plot
+
+# Print calculated temperatures for each radial distance
+print("The temperatures at various distances are:", T)
